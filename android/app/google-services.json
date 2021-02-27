@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "230315178139",
+    "project_id": "pollingapp-ba7f6",
+    "storage_bucket": "pollingapp-ba7f6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:230315178139:android:9b312929adfcf9db55ee3e",
+        "android_client_info": {
+          "package_name": "com.ruti.snapoll"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "230315178139-oqcehc3si4e6sfmr0ust05m96u6qcdut.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCw5I7IzeWkY4tSthTZtvbYfqwX0wzLWAI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "230315178139-oqcehc3si4e6sfmr0ust05m96u6qcdut.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "230315178139-8bqg4recg1bra1pn946gc9k3k5embhkh.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ruti.pollingApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
