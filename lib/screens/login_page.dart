@@ -59,7 +59,7 @@ class _LoginState extends State<Login> {
                 Container(
                   padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
                   child: ElevatedButton(
-                    child: Text("Create Account"),
+                    child: Text("Login"),
                     onPressed: () async {
                       auth.signInWithEmailAndPassword(email: _emailField, password: _passwordField);
                       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Home()));

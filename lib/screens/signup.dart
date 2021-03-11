@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 class SignUp extends StatelessWidget {
   String _emailField, _passwordField;
-  FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -40,15 +39,6 @@ class SignUp extends StatelessWidget {
               decoration: InputDecoration(
                 labelText: "Confirm",
               ),
-            ),
-            ElevatedButton(
-              child: Text("Submit"),
-              onChanged: (value) {
-                  setState(() {
-                    _emailField = value.trim();
-                  });
-                },
-              },
             ),
           ],
         ),
