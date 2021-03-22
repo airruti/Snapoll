@@ -74,6 +74,11 @@ class _creatorState extends State<creator>{
             ) ,
             new TextFormField(
               decoration: InputDecoration(
+                labelText: 'Question'
+              )
+            ) ,
+            new TextFormField(
+              decoration: InputDecoration(
                 labelText: 'Tags'
               )
             ) ,
