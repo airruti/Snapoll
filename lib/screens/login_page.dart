@@ -9,7 +9,9 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  String _emailField, _passwordField;
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
+
   final auth = FirebaseAuth.instance;
 
   @override
@@ -17,7 +19,7 @@ class _LoginState extends State<Login> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.lightBlue,
+        backgroundColor: Colors.red,
         elevation: 1.0,
         title: Text("Sign in to Snapoll!"),
       ),
@@ -29,59 +31,93 @@ class _LoginState extends State<Login> {
             Container(
               padding: EdgeInsets.symmetric(vertical: 20, horizontal: 30),
               child: TextFormField(
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
-                  labelText: "email",
-                ),
-                onChanged: (value) {
-                  setState(() {
-                    _emailField = value.trim();
-                  });
-                },
-              ),
+                  keyboardType: TextInputType.emailAddress,
+                  controller: email,
+                  decoration: InputDecoration(
+                    labelText: "email",
+                  ),
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Enter email address';
+                    } else if (!value.contains('@')) {
+                      return 'Please enter a valid email address';
+                    }
+                    return null;
+                  }),
             ),
             Container(
               padding: EdgeInsets.symmetric(vertical: 20, horizontal: 30),
               child: TextFormField(
-                obscureText: true,
-                decoration: InputDecoration(
-                  labelText: "password",
-                ),
-                onChanged: (value) {
-                  setState(() {
-                    _passwordField = value.trim();
-                  });
-                },
-              ),
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    labelText: "password",
+                  ),
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Enter password';
+                    } else if (value.length < 8) {
+                      return 'Please enter a valid password';
+                    }
+                    return null;
+                  }),
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-                  child: ElevatedButton(
-                    child: Text("Login"),
-                    onPressed: () async {
-                      auth.signInWithEmailAndPassword(email: _emailField, password: _passwordField);
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Home()));
-                    },
+                ElevatedButton(
+                  child: Text("Login"),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                      (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.pressed))
+                          return Colors.red;
+                        return Colors.red; // Use the component's default.
+                      },
+                    ),
                   ),
+                  onPressed: () async {
+                    try {
+                      await auth.signInWithEmailAndPassword(
+                          email: email.text, password: password.text);
+                      Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(builder: (context) => Home()));
+                    } catch (e) {
+                      return (e.message);
+                    }
+                  },
                 ),
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-                  child: ElevatedButton(
-                    child: Text("Create Account"),
-                    onPressed: () async {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => SignUp()));
-                      //auth.createUserWithEmailAndPassword(email: _emailField, password: _passwordField);
-                    },
+                ElevatedButton(
+                  child: Text("Create Account"),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                      (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.pressed))
+                          return Colors.red;
+                        return Colors.red; // Use the component's default.
+                      },
+                    ),
                   ),
+                  onPressed: () async {
+                    Navigator.of(context)
+                        .pushReplacement(
+                            MaterialPageRoute(builder: (context) => SignUp()));
+                  },
                 ),
               ],
             ),
             Container(
-              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 30),
+              padding: EdgeInsets.symmetric(vertical: 20),
               child: ElevatedButton(
                 child: Text("continue as guest"),
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                    (Set<MaterialState> states) {
+                      if (states.contains(MaterialState.pressed))
+                        return Colors.red;
+                      return Colors.red; // Use the component's default.
+                    },
+                  ),
+                ),
                 onPressed: () async {
                   dynamic result = await auth.signInAnonymously();
                   if (result == null) {

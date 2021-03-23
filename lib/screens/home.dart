@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:snapoll/screens/PollCreation.dart';
 import 'package:snapoll/widgets.dart';
 
 class Home extends StatefulWidget {
@@ -23,7 +24,7 @@ class _HomeState extends State<Home> {
               IconButton(
                 iconSize: 45,
                 icon: Icon(Icons.add_box_rounded),
-                onPressed: () {},
+                onPressed: () async { Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => creator()));},
               ),
             ],
           ),
