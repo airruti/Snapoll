@@ -3,13 +3,22 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:uuid/uuid.dart';
 
-class SignUp extends StatelessWidget {
+class SignUp extends StatefulWidget {
+  @override
+  _SignUpState createState() => _SignUpState();
+}
+
+class _SignUpState extends State<SignUp> {
   TextEditingController username = TextEditingController();
+
   TextEditingController email = TextEditingController();
+
   TextEditingController password = TextEditingController();
+
   TextEditingController confirmPassword = TextEditingController();
 
   final auth = FirebaseAuth.instance;
+
   final fireStoreInstance = FirebaseFirestore.instance;
 
   @override
@@ -95,6 +104,7 @@ class SignUp extends StatelessWidget {
       ),
     );
   }
+
   void firebaseSignUp() {
     if (password.value == confirmPassword.value) {
       auth
