@@ -9,12 +9,10 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+  final _formKey = GlobalKey<FormState>();
   TextEditingController username = TextEditingController();
-
   TextEditingController email = TextEditingController();
-
   TextEditingController password = TextEditingController();
-
   TextEditingController confirmPassword = TextEditingController();
 
   final auth = FirebaseAuth.instance;
@@ -32,74 +30,77 @@ class _SignUpState extends State<SignUp> {
       ),
       body: Container(
         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 30),
-        child: Column(
-          children: [
-            //username
-            TextFormField(
-                decoration: InputDecoration(
-                  labelText: "Username",
-                ),
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return 'Enter username';
-                  }
-                  return null;
-                }),
-            //email address
-            TextFormField(
-                decoration: InputDecoration(
-                  labelText: "Email",
-                ),
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return 'Enter email address';
-                  } else if (!value.contains('@')) {
-                    return 'Please enter a valid email address';
-                  }
-                  return null;
-                }),
-            //password
-            TextFormField(
-                decoration: InputDecoration(
-                  labelText: "Password",
-                ),
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return 'Enter password';
-                  } else if (value.length < 8) {
-                    return 'Please enter a valid password';
-                  }
-                  return null;
-                }),
-            //confirm password
-            TextFormField(
-                decoration: InputDecoration(
-                  labelText: "Confirm",
-                ),
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return 'Enter password';
-                  } else if (value.length < 8) {
-                    return 'Please enter a valid password';
-                  }
-                  return null;
-                }),
-            ElevatedButton(
-              child: Text("Create account"),
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                  (Set<MaterialState> states) {
-                    if (states.contains(MaterialState.pressed))
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              //username
+              TextFormField(
+                  controller: username,
+                  decoration: InputDecoration(
+                    labelText: "Username",
+                  ),
+                  validator: (value) {
+                    if (value.length == 0) {
+                      return 'Enter a username';
+                    } else
+                    return null;
+                  }),
+              //email address
+              TextFormField(
+                  controller: email,
+                  decoration: InputDecoration(
+                    labelText: "Email",
+                  ),
+                  validator: (value) {
+                    if (value.length == 0) {
+                      return 'Enter an email address';
+                    } else
+                    return null;
+                  }),
+              //password
+              TextFormField(
+                  controller: password,
+                  decoration: InputDecoration(
+                    labelText: "Password",
+                  ),
+                  validator: (value) {
+                    if (value.length == 0) {
+                      return 'Password cannot be empty';
+                    } else
+                    return null;
+                  }),
+              //confirm password
+              TextFormField(
+                  controller: confirmPassword,
+                  decoration: InputDecoration(
+                    labelText: "Confirm password",
+                  ),
+                  validator: (value) {
+                    if (value.length == 0) {
+                      return 'Confirm password cannot be empty';
+                    } else
+                    return null;
+                  }),
+              ElevatedButton(
+                child: Text("Create account"),
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                    (Set<MaterialState> states) {
+                      if (states.contains(MaterialState.pressed))
+                        return Colors.red;
                       return Colors.red;
-                    return Colors.red;
-                  },
+                    },
+                  ),
                 ),
-              ),
-              onPressed: () {
-                firebaseSignUp();
-              },
-            )
-          ],
+                onPressed: () {
+                  if (_formKey.currentState.validate()) {
+                    firebaseSignUp();
+                  }
+                },
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -112,7 +113,7 @@ class _SignUpState extends State<SignUp> {
               email: email.text, password: password.text)
           .then((result) {
         fireStoreInstance.collection("userIds").doc(result.user.uid).set({
-          "UserID": Uuid().v4(),
+          "User ID": Uuid().v4(),
         }).then((value) {
           fireStoreInstance.collection("users").doc(result.user.uid).set({
             "Username": username.text,
@@ -189,5 +190,13 @@ class _SignUpState extends State<SignUp> {
         ),
       );
     }
+  }
+
+  @override
+  void dispose() {
+    email.dispose();
+    password.dispose();
+    confirmPassword.dispose();
+    super.dispose();
   }
 }

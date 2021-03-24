@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:snapoll/screens/signup.dart';
@@ -48,6 +49,7 @@ class _LoginState extends State<Login> {
             Container(
               padding: EdgeInsets.symmetric(vertical: 20, horizontal: 30),
               child: TextFormField(
+                  controller: password,
                   obscureText: true,
                   decoration: InputDecoration(
                     labelText: "password",
@@ -75,15 +77,8 @@ class _LoginState extends State<Login> {
                       },
                     ),
                   ),
-                  onPressed: () async {
-                    try {
-                      await auth.signInWithEmailAndPassword(
-                          email: email.text, password: password.text);
-                      Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (context) => Home()));
-                    } catch (e) {
-                      return (e.message);
-                    }
+                  onPressed: () {
+                    firebaseSignIn();
                   },
                 ),
                 ElevatedButton(
@@ -97,10 +92,9 @@ class _LoginState extends State<Login> {
                       },
                     ),
                   ),
-                  onPressed: () async {
-                    Navigator.of(context)
-                        .pushReplacement(
-                            MaterialPageRoute(builder: (context) => SignUp()));
+                  onPressed: () {
+                    Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(builder: (context) => SignUp()));
                   },
                 ),
               ],
@@ -123,7 +117,9 @@ class _LoginState extends State<Login> {
                   if (result == null) {
                     print("error signing in");
                   } else {
-                    print("signed in");
+
+                    Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(builder: (context) => Home()));
                     print(result);
                   }
                 },
@@ -133,5 +129,78 @@ class _LoginState extends State<Login> {
         ),
       ),
     );
+  }
+
+  Future<dynamic> getData(dynamic result, String type) async {
+    final DocumentReference document =
+        FirebaseFirestore.instance.collection("userIds").doc(result.user.uid);
+    await document.get().then<dynamic>((DocumentSnapshot snapshot) async {
+      Map<String, dynamic> data = snapshot.data();
+      if (data[type] != null) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Home()),
+        );
+      } else {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                contentTextStyle:
+                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                titleTextStyle:
+                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                title: Text(
+                  "Error",
+                ),
+                content: Text("Account Does Not Exist"),
+                actions: [
+                  TextButton(
+                    child: Text("Ok",
+                        style: TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.bold)),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  )
+                ],
+              );
+            });
+      }
+    });
+  }
+
+  void firebaseSignIn() {
+    FirebaseAuth.instance
+        .signInWithEmailAndPassword(email: email.text, password: password.text)
+        .then((result) {
+      getData(result, "User ID");
+    }).catchError((err) {
+      print(err.message);
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              contentTextStyle:
+                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+              titleTextStyle:
+                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+              title: Text(
+                "Error",
+              ),
+              content: Text(err.message),
+              actions: [
+                TextButton(
+                  child: Text("Ok",
+                      style: TextStyle(
+                          color: Colors.black, fontWeight: FontWeight.bold)),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          });
+    });
   }
 }
