@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:snapoll/screens/home.dart';
 import 'auth_wrapper.dart';
 
 Future<void> main() async {
@@ -15,6 +16,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: AuthenticationWrapper(),
+      debugShowCheckedModeBanner: true,
     );
   }
 }

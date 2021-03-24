@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:snapoll/screens/signup.dart';
@@ -9,7 +10,9 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  String _emailField, _passwordField;
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
+
   final auth = FirebaseAuth.instance;
 
   @override
@@ -17,7 +20,7 @@ class _LoginState extends State<Login> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.lightBlue,
+        backgroundColor: Colors.red,
         elevation: 1.0,
         title: Text("Sign in to Snapoll!"),
       ),
@@ -29,65 +32,94 @@ class _LoginState extends State<Login> {
             Container(
               padding: EdgeInsets.symmetric(vertical: 20, horizontal: 30),
               child: TextFormField(
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
-                  labelText: "email",
-                ),
-                onChanged: (value) {
-                  setState(() {
-                    _emailField = value.trim();
-                  });
-                },
-              ),
+                  keyboardType: TextInputType.emailAddress,
+                  controller: email,
+                  decoration: InputDecoration(
+                    labelText: "email",
+                  ),
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Enter email address';
+                    } else if (!value.contains('@')) {
+                      return 'Please enter a valid email address';
+                    }
+                    return null;
+                  }),
             ),
             Container(
               padding: EdgeInsets.symmetric(vertical: 20, horizontal: 30),
               child: TextFormField(
-                obscureText: true,
-                decoration: InputDecoration(
-                  labelText: "password",
-                ),
-                onChanged: (value) {
-                  setState(() {
-                    _passwordField = value.trim();
-                  });
-                },
-              ),
+                  controller: password,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    labelText: "password",
+                  ),
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Enter password';
+                    } else if (value.length < 8) {
+                      return 'Please enter a valid password';
+                    }
+                    return null;
+                  }),
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-                  child: ElevatedButton(
-                    child: Text("Create Account"),
-                    onPressed: () async {
-                      auth.signInWithEmailAndPassword(email: _emailField, password: _passwordField);
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Home()));
-                    },
+                ElevatedButton(
+                  child: Text("Login"),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                      (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.pressed))
+                          return Colors.red;
+                        return Colors.red; // Use the component's default.
+                      },
+                    ),
                   ),
+                  onPressed: () {
+                    firebaseSignIn();
+                  },
                 ),
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-                  child: ElevatedButton(
-                    child: Text("Create Account"),
-                    onPressed: () async {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => SignUp()));
-                      //auth.createUserWithEmailAndPassword(email: _emailField, password: _passwordField);
-                    },
+                ElevatedButton(
+                  child: Text("Create Account"),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                      (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.pressed))
+                          return Colors.red;
+                        return Colors.red; // Use the component's default.
+                      },
+                    ),
                   ),
+                  onPressed: () {
+                    Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(builder: (context) => SignUp()));
+                  },
                 ),
               ],
             ),
             Container(
-              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 30),
+              padding: EdgeInsets.symmetric(vertical: 20),
               child: ElevatedButton(
                 child: Text("continue as guest"),
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                    (Set<MaterialState> states) {
+                      if (states.contains(MaterialState.pressed))
+                        return Colors.red;
+                      return Colors.red; // Use the component's default.
+                    },
+                  ),
+                ),
                 onPressed: () async {
                   dynamic result = await auth.signInAnonymously();
                   if (result == null) {
                     print("error signing in");
                   } else {
-                    print("signed in");
+
+                    Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(builder: (context) => Home()));
                     print(result);
                   }
                 },
@@ -97,5 +129,78 @@ class _LoginState extends State<Login> {
         ),
       ),
     );
+  }
+
+  Future<dynamic> getData(dynamic result, String type) async {
+    final DocumentReference document =
+        FirebaseFirestore.instance.collection("userIds").doc(result.user.uid);
+    await document.get().then<dynamic>((DocumentSnapshot snapshot) async {
+      Map<String, dynamic> data = snapshot.data();
+      if (data[type] != null) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Home()),
+        );
+      } else {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                contentTextStyle:
+                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                titleTextStyle:
+                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                title: Text(
+                  "Error",
+                ),
+                content: Text("Account Does Not Exist"),
+                actions: [
+                  TextButton(
+                    child: Text("Ok",
+                        style: TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.bold)),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  )
+                ],
+              );
+            });
+      }
+    });
+  }
+
+  void firebaseSignIn() {
+    FirebaseAuth.instance
+        .signInWithEmailAndPassword(email: email.text, password: password.text)
+        .then((result) {
+      getData(result, "User ID");
+    }).catchError((err) {
+      print(err.message);
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              contentTextStyle:
+                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+              titleTextStyle:
+                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+              title: Text(
+                "Error",
+              ),
+              content: Text(err.message),
+              actions: [
+                TextButton(
+                  child: Text("Ok",
+                      style: TextStyle(
+                          color: Colors.black, fontWeight: FontWeight.bold)),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          });
+    });
   }
 }
