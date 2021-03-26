@@ -15,9 +15,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      //home: AuthenticationWrapper(),
-      debugShowCheckedModeBanner: false,
-      home: Home(),
+      home: AuthenticationWrapper(),
+      debugShowCheckedModeBanner: true,
     );
   }
 }

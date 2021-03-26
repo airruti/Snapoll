@@ -69,7 +69,7 @@ class PollCard extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.pets_rounded,
+                    Icon(CategoryIcon(category),
                         color: const Color(0xFFE2202C)),
                     Padding(padding: EdgeInsets.only(left: 4.0)),
                     Text(
@@ -113,4 +113,51 @@ class PollCard extends StatelessWidget {
       ),
     );
   }
+}
+
+// Method that returns the appropriate icon for a category
+
+IconData CategoryIcon(String category)
+{
+  IconData theIcon;
+  switch(category)
+  {
+    case 'Pets':
+      theIcon = Icons.pets_rounded;
+      break;
+    case 'Movies':
+      theIcon = Icons.local_movies_rounded;
+      break;
+    case 'Music':
+      theIcon = Icons.music_note_rounded;
+      break;
+    case 'Fast Food':
+      theIcon = Icons.fastfood_rounded;
+      break;
+    case 'Restaurants':
+      theIcon = Icons.restaurant_rounded;
+      break;
+    case 'Science':
+      theIcon = Icons.science_rounded;
+      break;
+    case 'Fitness':
+      theIcon = Icons.fitness_center_rounded;
+      break;
+    case 'Video Games':
+      theIcon = Icons.videogame_asset_rounded;
+      break;
+    case 'Travel':
+      theIcon = Icons.public_off_rounded;
+      break;
+    case 'Education':
+      theIcon = Icons.school_rounded;
+      break;
+    case 'General':
+      theIcon = Icons.chat_rounded;
+      break;
+    default:
+      theIcon = Icons.error_rounded;    
+  }
+
+  return theIcon;
 }
