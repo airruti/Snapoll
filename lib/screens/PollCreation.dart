@@ -166,5 +166,5 @@ class _dynamicChoiceState extends State<dynamicChoice> {
             )),
       ),
     );
-  } }
->>>>>>> 4c7fdd3c3911f586b1e56f81f566d30478ef5fdd
+  }
+}
