@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:snapoll/screens/home.dart';
 
+// Poll creation screen
+
 class creator extends StatefulWidget {
   @override
   _creatorState createState() => _creatorState();
