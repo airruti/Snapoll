@@ -73,7 +73,7 @@ class _LoginState extends State<Login> {
                       (Set<MaterialState> states) {
                         if (states.contains(MaterialState.pressed))
                           return Colors.red;
-                        return Colors.red; // Use the component's default.
+                        return Colors.red;
                       },
                     ),
                   ),
@@ -88,7 +88,7 @@ class _LoginState extends State<Login> {
                       (Set<MaterialState> states) {
                         if (states.contains(MaterialState.pressed))
                           return Colors.red;
-                        return Colors.red; // Use the component's default.
+                        return Colors.red;
                       },
                     ),
                   ),
@@ -117,7 +117,6 @@ class _LoginState extends State<Login> {
                   if (result == null) {
                     print("error signing in");
                   } else {
-
                     Navigator.of(context).pushReplacement(
                         MaterialPageRoute(builder: (context) => Home()));
                     print(result);

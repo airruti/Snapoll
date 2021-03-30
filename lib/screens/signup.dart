@@ -125,18 +125,6 @@ class _SignUpState extends State<SignUp> {
           //IF EMAIL EXISTS CATCH THE ERROR TAKE TO VERIFY EMAIL
           print(err.code);
           switch (err.code) {
-            // case 'email-already-in-use':
-            //   Navigator.push(
-            //     context,
-            //     PageTransition(
-            //       child: VerifyEmail(
-            //         userType: "Professional",
-            //       ),
-            //       type: PageTransitionType.rightToLeft,
-            //       duration: Duration(milliseconds: 500),
-            //     ),
-            //   );
-            //break;
             default:
               showDialog(
                 context: context,
