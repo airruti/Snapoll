@@ -20,7 +20,7 @@ class _LoginState extends State<Login> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.red,
+        backgroundColor: const Color(0xFFE2202C),
         elevation: 1.0,
         title: Text("Sign in to Snapoll!"),
       ),
@@ -72,8 +72,8 @@ class _LoginState extends State<Login> {
                     backgroundColor: MaterialStateProperty.resolveWith<Color>(
                       (Set<MaterialState> states) {
                         if (states.contains(MaterialState.pressed))
-                          return Colors.red;
-                        return Colors.red;
+                          return const Color(0xFFE2202C);
+                        return const Color(0xFFE2202C); // Use the component's default.
                       },
                     ),
                   ),
@@ -87,13 +87,13 @@ class _LoginState extends State<Login> {
                     backgroundColor: MaterialStateProperty.resolveWith<Color>(
                       (Set<MaterialState> states) {
                         if (states.contains(MaterialState.pressed))
-                          return Colors.red;
-                        return Colors.red;
+                          return const Color(0xFFE2202C);
+                        return const Color(0xFFE2202C); // Use the component's default.
                       },
                     ),
                   ),
                   onPressed: () {
-                    Navigator.of(context).pushReplacement(
+                    Navigator.push(context,
                         MaterialPageRoute(builder: (context) => SignUp()));
                   },
                 ),
@@ -107,8 +107,8 @@ class _LoginState extends State<Login> {
                   backgroundColor: MaterialStateProperty.resolveWith<Color>(
                     (Set<MaterialState> states) {
                       if (states.contains(MaterialState.pressed))
-                        return Colors.red;
-                      return Colors.red; // Use the component's default.
+                        return const Color(0xFFE2202C);
+                      return const Color(0xFFE2202C); // Use the component's default.
                     },
                   ),
                 ),
@@ -117,7 +117,9 @@ class _LoginState extends State<Login> {
                   if (result == null) {
                     print("error signing in");
                   } else {
-                    Navigator.of(context).pushReplacement(
+                    
+                    // Changed this to push so the user proceeds to the next screen, tapping the back button returns to the sign in page.
+                    Navigator.push(context,
                         MaterialPageRoute(builder: (context) => Home()));
                     print(result);
                   }
