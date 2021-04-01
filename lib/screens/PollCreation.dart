@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:snapoll/screens/home.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 // Poll creation screen
 
-class creator extends StatefulWidget {
+class Creator extends StatefulWidget {
   @override
-  _creatorState createState() => _creatorState();
+  _CreatorState createState() => _CreatorState();
 }
 
-class _creatorState extends State<creator> {
-  List<dynamicChoice> dynamicList = [];
+class _CreatorState extends State<Creator> {
+  final auth = FirebaseAuth.instance;
+  List<DynamicChoice> dynamicList = [];
 
   List<String> choices = [];
   String title;
@@ -26,15 +29,15 @@ class _creatorState extends State<creator> {
     if (dynamicList.length >= 6) {
       return;
     }
-    dynamicList.add(new dynamicChoice());
+    dynamicList.add(DynamicChoice());
     debugPrint("Added Field");
   }
 
   @override
   Widget build(BuildContext context) {
-    Widget dynamicTextField = new Flexible(
+    Widget dynamicTextField = Flexible(
       flex: 2,
-      child: new ListView.builder(
+      child: ListView.builder(
         itemCount: dynamicList.length,
         itemBuilder: (_, index) => dynamicList[index],
       ),
@@ -49,7 +52,7 @@ class _creatorState extends State<creator> {
           FocusManager.instance.primaryFocus.unfocus();
         }
       },
-      child: new Scaffold(
+      child: Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
           // All app bar widgets are placed in the 'title:' so that I can have complete control over spacing and alignment of each widget
@@ -77,7 +80,7 @@ class _creatorState extends State<creator> {
           child: Container(
             width: double.infinity,
             padding: EdgeInsets.symmetric(horizontal: 24.0),
-            child: new Container(
+            child: Container(
               width: double.infinity,
               padding: EdgeInsets.fromLTRB(4, 0, 4, 4),
               margin: EdgeInsets.only(
@@ -97,18 +100,18 @@ class _creatorState extends State<creator> {
               ),
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
-                child: new Column(
+                child: Column(
                   children: [
-                    new TextField(
+                    TextField(
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             color: const Color(0xFFE2202C),
                             fontWeight: FontWeight.bold),
                         decoration: InputDecoration(labelText: 'Title')),
-                    new TextField(
+                    TextField(
                         textAlign: TextAlign.center,
                         decoration: InputDecoration(labelText: 'Question')),
-                    new TextField(
+                    TextField(
                         decoration: InputDecoration(
                             labelText: 'Category (Replace with drop down)')),
                     Padding(padding: EdgeInsets.fromLTRB(4, 8, 4, 4)),
@@ -120,13 +123,13 @@ class _creatorState extends State<creator> {
                           height: 50,
                           width: 50,
                           child: FittedBox(
-                            child: new FloatingActionButton(
+                            child: FloatingActionButton(
                                 onPressed: addDynamic,
                                 shape: RoundedRectangleBorder(
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(8.0))),
                                 backgroundColor: const Color(0xFFE2202C),
-                                child: new Icon(Icons.add_rounded, size: 45)),
+                                child: Icon(Icons.add_rounded, size: 45)),
                           ),
                         ),
                       ],
@@ -144,19 +147,19 @@ class _creatorState extends State<creator> {
 
 
 // Dynamic choice widget is made stateful so that a Choice counter can implemented
-class dynamicChoice extends StatefulWidget {
+class DynamicChoice extends StatefulWidget {
   @override
-  _dynamicChoiceState createState() => _dynamicChoiceState();
+  _DynamicChoiceState createState() => _DynamicChoiceState();
 }
 
-class _dynamicChoiceState extends State<dynamicChoice> {
-  TextEditingController choice = new TextEditingController();
+class _DynamicChoiceState extends State<DynamicChoice> {
+  TextEditingController choice = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.fromLTRB(4, 4, 4, 8),
-      child: new TextFormField(
+      child: TextFormField(
         controller: choice,
         autofocus: true,
         decoration: InputDecoration(

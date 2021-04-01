@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:snapoll/screens/PollCreation.dart';
 import 'package:snapoll/widgets.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -8,6 +10,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,9 +34,9 @@ class _HomeState extends State<Home> {
             IconButton(
               iconSize: 45,
               icon: Icon(Icons.add_box_rounded),
-              onPressed: () async {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => creator()));
+              onPressed: () {
+                 Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => Creator()));
               },
             ),
           ],
