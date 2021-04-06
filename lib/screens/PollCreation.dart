@@ -145,7 +145,6 @@ class _CreatorState extends State<Creator> {
   } //Build End
 }
 
-
 // Dynamic choice widget is made stateful so that a Choice counter can implemented
 class DynamicChoice extends StatefulWidget {
   @override
