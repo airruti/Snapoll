@@ -44,38 +44,6 @@ class _HomeState extends State<Home> {
         centerTitle: true,
         backgroundColor: const Color(0xFFE2202C),
       ),
-      body: SafeArea(
-          child: Container(
-              width: double.infinity,
-              padding: EdgeInsets.symmetric(horizontal: 24.0),
-              child: Stack(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                          margin: EdgeInsets.only(
-                        bottom: 32.0,
-                      )),
-                      Expanded(
-                          child: ListView(children: [
-                        PollCard(
-                            title: 'Best Tarantino Film',
-                            question: 'What\'s the best Tarantino film?',
-                            category: 'Movies'),
-                        PollCard(
-                          title: 'Best Guard Dog',
-                          question:
-                              'Which dog can protect me the best from burglars?',
-                          category: 'Pets',
-                          votes: 123,
-                        ),
-                        PollCard(title: 'Favorite Kanye West Song', question: 'What\'s your favorite Kanye song?', category: 'Music', votes: 99,),
-                      ]))
-                    ],
-                  )
-                ],
-              ))),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: const Color(0xFFE2202C),
         selectedItemColor: Colors.white,
