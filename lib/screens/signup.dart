@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:uuid/uuid.dart';
 
+import 'home.dart';
+
 class SignUp extends StatefulWidget {
   @override
   _SignUpState createState() => _SignUpState();
@@ -14,6 +16,10 @@ class _SignUpState extends State<SignUp> {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
   TextEditingController confirmPassword = TextEditingController();
+
+  void initState() {
+    super.initState();
+  }
 
   final auth = FirebaseAuth.instance;
 
@@ -44,7 +50,7 @@ class _SignUpState extends State<SignUp> {
                     if (value.length == 0) {
                       return 'Enter a username';
                     } else
-                    return null;
+                      return null;
                   }),
               //email address
               TextFormField(
@@ -56,11 +62,12 @@ class _SignUpState extends State<SignUp> {
                     if (value.length == 0) {
                       return 'Enter an email address';
                     } else
-                    return null;
+                      return null;
                   }),
               //password
               TextFormField(
                   controller: password,
+                  obscureText: true,
                   decoration: InputDecoration(
                     labelText: "Password",
                   ),
@@ -68,10 +75,11 @@ class _SignUpState extends State<SignUp> {
                     if (value.length == 0) {
                       return 'Password cannot be empty';
                     } else
-                    return null;
+                      return null;
                   }),
               //confirm password
               TextFormField(
+                  obscureText: true,
                   controller: confirmPassword,
                   decoration: InputDecoration(
                     labelText: "Confirm password",
@@ -80,7 +88,7 @@ class _SignUpState extends State<SignUp> {
                     if (value.length == 0) {
                       return 'Confirm password cannot be empty';
                     } else
-                    return null;
+                      return null;
                   }),
               ElevatedButton(
                 child: Text("Create account"),
@@ -107,7 +115,7 @@ class _SignUpState extends State<SignUp> {
   }
 
   void firebaseSignUp() {
-    if (password.value == confirmPassword.value) {
+    if (password.text == confirmPassword.text) {
       auth
           .createUserWithEmailAndPassword(
               email: email.text, password: password.text)
@@ -155,6 +163,7 @@ class _SignUpState extends State<SignUp> {
           }
         },
       );
+      Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
     } else {
       showDialog(
         context: context,

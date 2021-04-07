@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:snapoll/screens/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:uuid/uuid.dart';
 
 // Poll creation screen
 
@@ -11,27 +12,15 @@ class Creator extends StatefulWidget {
 }
 
 class _CreatorState extends State<Creator> {
+  final db = FirebaseFirestore.instance;
   final auth = FirebaseAuth.instance;
+
   List<DynamicChoice> dynamicList = [];
 
-  List<String> choices = [];
-  String title;
-  String tags;
-
-  addDynamic() {
-    debugPrint("Add Pressed");
-    if (choices.length != 0) {
-      choices = [];
-      dynamicList = [];
-      debugPrint("Add Reset");
-    }
-    setState(() {});
-    if (dynamicList.length >= 6) {
-      return;
-    }
-    dynamicList.add(DynamicChoice());
-    debugPrint("Added Field");
-  }
+  List<TextEditingController> choices = [];
+  TextEditingController title = TextEditingController();
+  TextEditingController question = TextEditingController();
+  TextEditingController category = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -99,19 +88,22 @@ class _CreatorState extends State<Creator> {
                     16.0), // Border radius for each poll, a higher number would make it more round
               ),
               child: Padding(
-                padding: const EdgeInsets.all(12.0),
+                padding: const EdgeInsets.all(10.0),
                 child: Column(
                   children: [
                     TextField(
+                        controller: title,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             color: const Color(0xFFE2202C),
                             fontWeight: FontWeight.bold),
                         decoration: InputDecoration(labelText: 'Title')),
                     TextField(
+                        controller: question,
                         textAlign: TextAlign.center,
                         decoration: InputDecoration(labelText: 'Question')),
                     TextField(
+                        controller: category,
                         decoration: InputDecoration(
                             labelText: 'Category (Replace with drop down)')),
                     Padding(padding: EdgeInsets.fromLTRB(4, 8, 4, 4)),
@@ -134,6 +126,15 @@ class _CreatorState extends State<Creator> {
                         ),
                       ],
                     ),
+                    RaisedButton(
+                      padding: EdgeInsets.all(10),
+                      color: Color(0xFFE2202C),
+                      textColor: Colors.white,
+                      onPressed: () {
+                        databasePoll();
+                      },
+                      child: Text("Create Poll"),
+                    ),
                   ],
                 ),
               ),
@@ -142,6 +143,32 @@ class _CreatorState extends State<Creator> {
         ),
       ),
     ); //End of Scaffold
+  }
+
+  databasePoll() {
+    final String storage = Uuid().v4();
+    db.collection("polls").doc(storage).set(
+      {
+        "Poll Question": question.text,
+        "Answers": [choices.toString()],
+        "Title": title.text,
+      },
+    );
+  }
+
+  addDynamic() {
+    debugPrint("Add Pressed");
+    if (choices.length != 0) {
+      choices = [];
+      dynamicList = [];
+      debugPrint("Add Reset");
+    }
+    setState(() {});
+    if (dynamicList.length >= 6) {
+      return;
+    }
+    dynamicList.add(DynamicChoice());
+    debugPrint("Added Field");
   } //Build End
 }
 
@@ -163,7 +190,7 @@ class _DynamicChoiceState extends State<DynamicChoice> {
         autofocus: true,
         decoration: InputDecoration(
             // Increment the choice count
-            hintText: 'Choice 0',
+            hintText: 'Choice',
             border: OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(8.0)),
               borderSide: const BorderSide(color: Colors.red),

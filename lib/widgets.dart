@@ -1,17 +1,23 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 class PollCard extends StatelessWidget {
-  final String title;
-  final String question;
+  final Future<DocumentSnapshot> title;
+  final Future<DocumentSnapshot> question;
   final String category;
-  final int votes;
+  final Future<DocumentSnapshot> votes;
+
+  String uuid = Uuid().v4();
+  final db = FirebaseFirestore.instance.collection("polls");
+
   PollCard({this.title, this.question, this.category, this.votes});
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: EdgeInsets.symmetric(horizontal: 10),
       width: double.infinity,
-      padding: EdgeInsets.fromLTRB(4, 16, 4, 4),
       margin: EdgeInsets.only(
         // The spacing between each poll card
         bottom: 20.0,
@@ -69,7 +75,7 @@ class PollCard extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    Icon(CategoryIcon(category),
+                    Icon(categoryIcon(category),
                         color: const Color(0xFFE2202C)),
                     Padding(padding: EdgeInsets.only(left: 4.0)),
                     Text(
@@ -117,7 +123,7 @@ class PollCard extends StatelessWidget {
 
 // Method that returns the appropriate icon for a category
 
-IconData CategoryIcon(String category)
+IconData categoryIcon(String category)
 {
   IconData theIcon;
   switch(category)
