@@ -1,17 +1,44 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
-class PollCard extends StatelessWidget {
-  final String title;
-  final String question;
-  final String category;
-  final int votes;
-  PollCard({this.title, this.question, this.category, this.votes});
+class PollCard2 extends StatefulWidget {
+  
+
+  // 
+  
+
+  @override
+  _PollCardState createState() => _PollCardState();
+}
+class _PollCardState extends State<PollCard2> {
+  String title;
+  String question;
+  String votes;
+  String category;
+  String uuid = Uuid().v4();
+
+  final pollRef = FirebaseFirestore.instance.collection("polls");
+  final catRef = FirebaseFirestore.instance.collection("categories");
+
+  getTitle() async {
+    QuerySnapshot snapshot = await pollRef
+        .doc(uuid)
+        .collection('Title')
+        .get();
+
+    setState(() {
+      title = snapshot.docs.toString();
+    });
+  }
+  var _polls;
+
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: EdgeInsets.symmetric(horizontal: 10),
       width: double.infinity,
-      padding: EdgeInsets.fromLTRB(4, 16, 4, 4),
       margin: EdgeInsets.only(
         // The spacing between each poll card
         bottom: 20.0,
@@ -31,7 +58,7 @@ class PollCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            title ??
+            pollRef.doc(uuid).collection("Title").toString() ??
                 "UNNAMED POLL", // If there is no provided title, it will default to UNNAMED POLL
             style: TextStyle(
               // Font color and font weight for the poll title
@@ -46,7 +73,7 @@ class PollCard extends StatelessWidget {
             ),
           ),
           Text(
-              question ??
+              pollRef.doc(uuid).collection("Poll Question").toString() ??
                   "NO QUESTION ADDED", // If there is no provided question, the text will default to NO QUESTION ADDED
               textAlign: TextAlign.center,
               style: TextStyle(
@@ -69,7 +96,7 @@ class PollCard extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.pets_rounded,
+                    Icon(categoryIcon(category),
                         color: const Color(0xFFE2202C)),
                     Padding(padding: EdgeInsets.only(left: 4.0)),
                     Text(
@@ -100,7 +127,7 @@ class PollCard extends StatelessWidget {
                       color: Colors.white,
                     ),
                     Text(
-                      votes.toString(),
+                      "0",
                       style: TextStyle(
                           color: Colors.white, fontWeight: FontWeight.bold),
                     ),
@@ -113,4 +140,51 @@ class PollCard extends StatelessWidget {
       ),
     );
   }
+}
+
+// Method that returns the appropriate icon for a category
+
+IconData categoryIcon(String category)
+{
+  IconData theIcon;
+  switch(category)
+  {
+    case 'Tech':
+      theIcon = Icons.computer;
+      break;
+    case 'Movies':
+      theIcon = Icons.local_movies_rounded;
+      break;
+    case 'Music':
+      theIcon = Icons.music_note_rounded;
+      break;
+    case 'Fast Food':
+      theIcon = Icons.fastfood_rounded;
+      break;
+    case 'Restaurants':
+      theIcon = Icons.restaurant_rounded;
+      break;
+    case 'Science':
+      theIcon = Icons.science_rounded;
+      break;
+    case 'Fitness':
+      theIcon = Icons.fitness_center_rounded;
+      break;
+    case 'Video Games':
+      theIcon = Icons.videogame_asset_rounded;
+      break;
+    case 'Travel':
+      theIcon = Icons.public_off_rounded;
+      break;
+    case 'Education':
+      theIcon = Icons.school_rounded;
+      break;
+    case 'General':
+      theIcon = Icons.chat_rounded;
+      break;
+    default:
+      theIcon = Icons.error_rounded;    
+  }
+
+  return theIcon;
 }
