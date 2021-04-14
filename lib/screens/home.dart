@@ -83,206 +83,231 @@ class _HomeState extends State<Home> {
             return ListView(
                 children: snapshot.data.docs.map((document) {
               return Container(
+                  padding: EdgeInsets.all(20),
                   child: Center(
-                child: Column(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      width: double.infinity,
-                      margin: EdgeInsets.only(
-                        // The spacing between each poll card
-                        bottom: 20.0,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(
-                          // Places a border around each poll card
-                          color: const Color(0xFFE2202C),
-                          width:
-                              2.0, // Border outline width, a higher number would make it thicker
-                        ),
-                        borderRadius: BorderRadius.circular(
-                            16.0), // Border radius for each poll, a higher number would make it more round
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            document['Title'],
-                            style: TextStyle(
-                              // Font color and font weight for the poll title
+                    child: Column(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(
+                              // Places a border around each poll card
                               color: const Color(0xFFE2202C),
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
+                              width:
+                                  2.0, // Border outline width, a higher number would make it thicker
                             ),
+                            borderRadius: BorderRadius.circular(
+                                16.0), // Border radius for each poll, a higher number would make it more round
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                              // Spacing between the poll title and question in the poll card
-                              top: 8.0,
-                            ),
-                          ),
-                          Text(
-                            document['Poll Question'],
-                            style: TextStyle(
-                              // Font color and font weight for the poll title
-                              color: const Color(0xFFE2202C),
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                              // Spacing between the poll title and question in the poll card
-                              top: 8.0,
-                            ),
-                          ),
-                          ConstrainedBox(
-                            constraints:
-                                BoxConstraints.tightFor(height: 35, width: 300),
-                            child: ElevatedButton(
-                              onPressed: () {
-                                votes++;
-                                pollRef.doc(uuid).update({'Votes': votes});
-                              },
-                              child: Text(
-                                document['Answers'][0],
-                                style: TextStyle(
-                                  color: const Color(0xFFE2202C),
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                              // Spacing between the poll title and question in the poll card
-                              top: 8.0,
-                            ),
-                          ),
-                          ConstrainedBox(
-                            constraints:
-                                BoxConstraints.tightFor(height: 35, width: 300),
-                            child: ElevatedButton(
-                              onPressed: () {
-                                votes++;
-                                pollRef.doc(uuid).update({'Votes': votes});
-                              },
-                              child: Text(
-                                document['Answers'][1],
-                                style: TextStyle(
-                                  color: const Color(0xFFE2202C),
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                              // Spacing between the poll title and question in the poll card
-                              top: 8.0,
-                            ),
-                          ),
-                          ConstrainedBox(
-                            constraints:
-                                BoxConstraints.tightFor(height: 35, width: 300),
-                            child: ElevatedButton(
-                              onPressed: () {
-                                votes++;
-                                pollRef.doc(uuid).update({'Votes': votes});
-                              },
-                              child: Text(
-                                document['Answers'][2],
-                                style: TextStyle(
-                                  color: const Color(0xFFE2202C),
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                              // Spacing between the poll title and question in the poll card
-                              top: 8.0,
-                            ),
-                          ),
-                          ConstrainedBox(
-                            constraints:
-                                BoxConstraints.tightFor(height: 35, width: 300),
-                            child: ElevatedButton(
-                              onPressed: () {
-                                votes++;
-                                pollRef.doc(uuid).update({'Votes': votes});
-                              },
-                              child: Text(
-                                document['Answers'][3],
-                                style: TextStyle(
-                                  color: const Color(0xFFE2202C),
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                              // Spacing between the poll title and question in the poll card
-                              top: 8.0,
-                            ),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Container(
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      categoryIcon(document['Category']),
-                                    ),
-                                    Padding(
-                                        padding: EdgeInsets.only(left: 4.0)),
-                                    Text(
-                                      document['Category'],
-                                      style: TextStyle(
-                                        // Font color and font weight for the poll title
-                                        color: const Color(0xFFE2202C),
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ],
+                              Padding(padding: EdgeInsets.only(top: 10)),
+                              Text(
+                                document['Title'],
+                                style: TextStyle(
+                                  // Font color and font weight for the poll title
+                                  color: const Color(0xFFE2202C),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
                                 ),
                               ),
-                              Container(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Icon(
-                                      Icons.person,
-                                      color: Colors.red,
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  // Spacing between the poll title and question in the poll card
+                                  top: 8.0,
+                                ),
+                              ),
+                              Text(
+                                document['Poll Question'],
+                                style: TextStyle(
+                                  // Font color and font weight for the poll title
+                                  color: const Color(0xFFE2202C),
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  // Spacing between the poll title and question in the poll card
+                                  top: 8.0,
+                                ),
+                              ),
+                              ConstrainedBox(
+                                constraints: BoxConstraints.tightFor(
+                                    height: 35, width: 300),
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Color(0xFFE2202C),
+                                  ),
+                                  onPressed: () {
+                                    votes++;
+                                    pollRef.doc(uuid).update({'Votes': votes});
+                                  },
+                                  child: Text(
+                                    document['Answers'][0],
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
                                     ),
-                                    Text(
-                                      document['Votes'].toString(),
-                                      style: TextStyle(
-                                        // Font color and font weight for the poll title
-                                        color: const Color(0xFFE2202C),
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  // Spacing between the poll title and question in the poll card
+                                  top: 8.0,
+                                ),
+                              ),
+                              ConstrainedBox(
+                                constraints: BoxConstraints.tightFor(
+                                    height: 35, width: 300),
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Color(0xFFE2202C),
+                                  ),
+                                  onPressed: () {
+                                    votes++;
+                                    pollRef.doc(uuid).update({'Votes': votes});
+                                  },
+                                  child: Text(
+                                    document['Answers'][1],
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
                                     ),
-                                  ],
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  // Spacing between the poll title and question in the poll card
+                                  top: 8.0,
+                                ),
+                              ),
+                              ConstrainedBox(
+                                constraints: BoxConstraints.tightFor(
+                                    height: 35, width: 300),
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Color(0xFFE2202C),
+                                  ),
+                                  onPressed: () {
+                                    votes++;
+                                    pollRef.doc(uuid).update({'Votes': votes});
+                                  },
+                                  child: Text(
+                                    document['Answers'][2],
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  // Spacing between the poll title and question in the poll card
+                                  top: 8.0,
+                                ),
+                              ),
+                              ConstrainedBox(
+                                constraints: BoxConstraints.tightFor(
+                                    height: 35, width: 300),
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Color(0xFFE2202C),
+                                  ),
+                                  onPressed: () {
+                                    votes++;
+                                    pollRef.doc(uuid).update({'Votes': votes});
+                                  },
+                                  child: Text(
+                                    document['Answers'][3],
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  // Spacing between the poll title and question in the poll card
+                                  top: 8.0,
+                                ),
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: 2.0,
+                                      horizontal: 10.0,
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          categoryIcon(document['Category']),
+                                          color: const Color(0xFFE2202C),
+                                        ),
+                                        Padding(
+                                            padding:
+                                                EdgeInsets.only(left: 4.0)),
+                                        Text(
+                                          document['Category'],
+                                          style: TextStyle(
+                                            // Font color and font weight for the poll title
+                                            color: const Color(0xFFE2202C),
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFFE2202C),
+                                      borderRadius: BorderRadius.circular(12.0),
+                                    ),
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: 2.0,
+                                      horizontal: 10.0,
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Icon(
+                                          Icons.person,
+                                          color: Colors.white,
+                                        ),
+                                        Text(
+                                          document['Votes'].toString(),
+                                          style: TextStyle(
+                                            // Font color and font weight for the poll title
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  // Spacing between the poll title and question in the poll card
+                                  top: 8.0,
                                 ),
                               ),
                             ],
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                              // Spacing between the poll title and question in the poll card
-                              top: 8.0,
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ));
+                  ));
             }).toList());
           }),
     );
