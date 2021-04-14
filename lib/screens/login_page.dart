@@ -63,69 +63,101 @@ class _LoginState extends State<Login> {
                     return null;
                   }),
             ),
+            SizedBox(
+              height: 20
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                ElevatedButton(
-                  child: Text("Login"),
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                      (Set<MaterialState> states) {
-                        if (states.contains(MaterialState.pressed))
-                          return const Color(0xFFE2202C);
-                        return const Color(0xFFE2202C); // Use the component's default.
+                Container(
+                  child: ConstrainedBox(
+                    constraints:
+                        BoxConstraints.tightFor(height: 35, width: 150),
+                    child: ElevatedButton(
+                      child: Text("Login"),
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.resolveWith<Color>(
+                          (Set<MaterialState> states) {
+                            if (states.contains(MaterialState.pressed))
+                              return const Color(0xFFE2202C);
+                            return const Color(
+                                0xFFE2202C); // Use the component's default.
+                          },
+                        ),
+                      ),
+                      onPressed: () {
+                        firebaseSignIn();
                       },
                     ),
                   ),
-                  onPressed: () {
-                    firebaseSignIn();
-                  },
                 ),
-                ElevatedButton(
-                  child: Text("Create Account"),
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                      (Set<MaterialState> states) {
-                        if (states.contains(MaterialState.pressed))
-                          return const Color(0xFFE2202C);
-                        return const Color(0xFFE2202C); // Use the component's default.
-                      },
-                    ),
-                  ),
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => SignUp()));
-                  },
-                ),
-              ],
-            ),
-            Container(
+                Text("or"),
+                Container(
               padding: EdgeInsets.symmetric(vertical: 20),
-              child: ElevatedButton(
-                child: Text("continue as guest"),
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                    (Set<MaterialState> states) {
-                      if (states.contains(MaterialState.pressed))
-                        return const Color(0xFFE2202C);
-                      return const Color(0xFFE2202C); // Use the component's default.
-                    },
+              child: ConstrainedBox(
+                constraints: BoxConstraints.tightFor(height: 35, width: 150),
+                child: ElevatedButton(
+                  child: Text("continue as guest"),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                      (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.pressed))
+                          return const Color(0xFFE2202C);
+                        return const Color(
+                            0xFFE2202C); // Use the component's default.
+                      },
+                    ),
                   ),
+                  onPressed: () {
+                    dynamic result = auth.signInAnonymously();
+                    if (result == null) {
+                      print("error signing in");
+                    } else {
+                      // Changed this to push so the user proceeds to the next screen, tapping the back button returns to the sign in page.
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Home()));
+                      print(result);
+                    }
+                  },
                 ),
-                onPressed: () async {
-                  dynamic result = await auth.signInAnonymously();
-                  if (result == null) {
-                    print("error signing in");
-                  } else {
-                    
-                    // Changed this to push so the user proceeds to the next screen, tapping the back button returns to the sign in page.
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Home()));
-                    print(result);
-                  }
-                },
               ),
             ),
+                
+              ],
+            ),
+            SizedBox(
+              height: 100,
+            ),
+
+            Text("-------------------- Not signed up yet? -------------------- "),
+            SizedBox(
+              height: 10
+            ),
+            Container(
+                  child: ConstrainedBox(
+                    constraints:
+                        BoxConstraints.tightFor(height: 35, width: 150),
+                    child: ElevatedButton(
+                      child: Text("Create Account"),
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.resolveWith<Color>(
+                          (Set<MaterialState> states) {
+                            if (states.contains(MaterialState.pressed))
+                              return const Color(0xFFE2202C);
+                            return const Color(
+                                0xFFE2202C); // Use the component's default.
+                          },
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => SignUp()));
+                      },
+                    ),
+                  ),
+                ),
           ],
         ),
       ),

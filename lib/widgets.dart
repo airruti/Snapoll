@@ -2,16 +2,37 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
-class PollCard extends StatelessWidget {
-  final Future<DocumentSnapshot> title;
-  final Future<DocumentSnapshot> question;
-  final String category;
-  final Future<DocumentSnapshot> votes;
+class PollCard2 extends StatefulWidget {
+  
 
+  // 
+  
+
+  @override
+  _PollCardState createState() => _PollCardState();
+}
+class _PollCardState extends State<PollCard2> {
+  String title;
+  String question;
+  String votes;
+  String category;
   String uuid = Uuid().v4();
-  final db = FirebaseFirestore.instance.collection("polls");
 
-  PollCard({this.title, this.question, this.category, this.votes});
+  final pollRef = FirebaseFirestore.instance.collection("polls");
+  final catRef = FirebaseFirestore.instance.collection("categories");
+
+  getTitle() async {
+    QuerySnapshot snapshot = await pollRef
+        .doc(uuid)
+        .collection('Title')
+        .get();
+
+    setState(() {
+      title = snapshot.docs.toString();
+    });
+  }
+  var _polls;
+
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +58,7 @@ class PollCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            title ??
+            pollRef.doc(uuid).collection("Title").toString() ??
                 "UNNAMED POLL", // If there is no provided title, it will default to UNNAMED POLL
             style: TextStyle(
               // Font color and font weight for the poll title
@@ -52,7 +73,7 @@ class PollCard extends StatelessWidget {
             ),
           ),
           Text(
-              question ??
+              pollRef.doc(uuid).collection("Poll Question").toString() ??
                   "NO QUESTION ADDED", // If there is no provided question, the text will default to NO QUESTION ADDED
               textAlign: TextAlign.center,
               style: TextStyle(
@@ -106,7 +127,7 @@ class PollCard extends StatelessWidget {
                       color: Colors.white,
                     ),
                     Text(
-                      votes.toString(),
+                      "0",
                       style: TextStyle(
                           color: Colors.white, fontWeight: FontWeight.bold),
                     ),

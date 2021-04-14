@@ -6,19 +6,24 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uuid/uuid.dart';
 
-import 'create_poll.dart';
-
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
-  
+  CollectionReference pollRef = FirebaseFirestore.instance.collection("polls");
+
   final auth = FirebaseAuth.instance;
   final db = FirebaseFirestore.instance;
   String uid = Uuid().v4();
-  List<Widget> polls = [PollCard()];
+  int votes = 0;
+
+  List steps = [];
+
+
+  List<Widget> polls = [PollCard2()];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,22 +74,130 @@ class _HomeState extends State<Home> {
           ),
         ],
       ),
-      body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-        child: FutureBuilder<DocumentSnapshot>(
+      body: StreamBuilder(
+          stream: pollRef.snapshots(),
           builder:
-              (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              Map<String, dynamic> data = snapshot.data.data();
-              polls.clear();
-              for (int i = 0; i < data["polls"].length; i++) {
-                polls.add(data["polls"[i]]);
-              }
+              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (!snapshot.hasData) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
             }
-            return PollCard();
-          },
-        ),
-      ),
+            return ListView(
+                children: snapshot.data.docs.map((document) {
+              return Container(
+                  child: Center(
+                child: Column(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      width: double.infinity,
+                      margin: EdgeInsets.only(
+                        // The spacing between each poll card
+                        bottom: 20.0,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(
+                          // Places a border around each poll card
+                          color: const Color(0xFFE2202C),
+                          width:
+                              2.0, // Border outline width, a higher number would make it thicker
+                        ),
+                        borderRadius: BorderRadius.circular(
+                            16.0), // Border radius for each poll, a higher number would make it more round
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            document['Title'],
+                            style: TextStyle(
+                              // Font color and font weight for the poll title
+                              color: const Color(0xFFE2202C),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                              // Spacing between the poll title and question in the poll card
+                              top: 8.0,
+                            ),
+                          ),
+                          Text(
+                            document['Poll Question'],
+                            style: TextStyle(
+                              // Font color and font weight for the poll title
+                              color: const Color(0xFFE2202C),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                              // Spacing between the poll title and question in the poll card
+                              top: 8.0,
+                            ),
+                          ),
+                          ElevatedButton(
+                            onPressed: (){
+                              
+                              votes++;
+                              print(votes);
+                            },
+                            child: Text(
+    //                           for (int i = 0; i < 4; i++) {
+    //     steps.add(snapshot.data.documents[index]['steps'][i]['step'])
+    //  }
+     document['Answers'].toString(),
+                              style: TextStyle(
+                                // Font color and font weight for the poll title
+                                color: const Color(0xFFE2202C),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                              // Spacing between the poll title and question in the poll card
+                              top: 8.0,
+                            ),
+                          ),
+                          Text(
+                            document['Category'],
+                            style: TextStyle(
+                              // Font color and font weight for the poll title
+                              color: const Color(0xFFE2202C),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                              // Spacing between the poll title and question in the poll card
+                              top: 8.0,
+                            ),
+                          ),
+                          Text(
+                            document['Votes'].toString(),
+                            style: TextStyle(
+                              // Font color and font weight for the poll title
+                              color: const Color(0xFFE2202C),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                              // Spacing between the poll title and question in the poll card
+                              top: 8.0,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ));
+            }).toList());
+          }),
     );
   }
 }

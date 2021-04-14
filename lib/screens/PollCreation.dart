@@ -150,8 +150,10 @@ class _CreatorState extends State<Creator> {
     db.collection("polls").doc(storage).set(
       {
         "Poll Question": question.text,
-        "Answers": [choices.toString()],
+        "Answers": test(),
         "Title": title.text,
+        "Category": category.text,
+        "Votes": 0,
       },
     );
   }
@@ -170,23 +172,58 @@ class _CreatorState extends State<Creator> {
     dynamicList.add(DynamicChoice());
     debugPrint("Added Field");
   } //Build End
+
+  List<String> test(){
+    List<String> choic = [];
+    for(int i = 0; i < dynamicList.length; i++){
+      choic.add(dynamicList[i].getString());
+
+    }
+    return choic;
+  }
 }
 
 // Dynamic choice widget is made stateful so that a Choice counter can implemented
-class DynamicChoice extends StatefulWidget {
-  @override
-  _DynamicChoiceState createState() => _DynamicChoiceState();
-}
+// class DynamicChoice extends StatefulWidget {
+//   @override
+//   _DynamicChoiceState createState() => _DynamicChoiceState();
+// }
 
-class _DynamicChoiceState extends State<DynamicChoice> {
-  TextEditingController choice = TextEditingController();
+// class _DynamicChoiceState extends State<DynamicChoice> {
+//   TextEditingController choices = TextEditingController();
 
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       padding: EdgeInsets.fromLTRB(4, 4, 4, 8),
+//       child: TextFormField(
+//         controller: choices,
+//         autofocus: true,
+//         decoration: InputDecoration(
+//             // Increment the choice count
+//             hintText: 'Choice',
+//             border: OutlineInputBorder(
+//               borderRadius: BorderRadius.all(Radius.circular(8.0)),
+//               borderSide: const BorderSide(color: Colors.red),
+//             )),
+//       ),
+//     );
+//   }
+
+//   String getString(){
+//     return choices.text;
+//   }
+// }
+// 
+class DynamicChoice extends StatelessWidget {
+  final TextEditingController choices = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return Container(
+    
+      return Container(
       padding: EdgeInsets.fromLTRB(4, 4, 4, 8),
       child: TextFormField(
-        controller: choice,
+        controller: choices,
         autofocus: true,
         decoration: InputDecoration(
             // Increment the choice count
@@ -197,5 +234,8 @@ class _DynamicChoiceState extends State<DynamicChoice> {
             )),
       ),
     );
+  }
+  String getString(){
+    return choices.text;
   }
 }
