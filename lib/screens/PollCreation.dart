@@ -132,6 +132,8 @@ class _CreatorState extends State<Creator> {
                       textColor: Colors.white,
                       onPressed: () {
                         databasePoll();
+                        Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Home()));
                       },
                       child: Text("Create Poll"),
                     ),
@@ -166,7 +168,7 @@ class _CreatorState extends State<Creator> {
       debugPrint("Add Reset");
     }
     setState(() {});
-    if (dynamicList.length >= 6) {
+    if (dynamicList.length == 4) {
       return;
     }
     dynamicList.add(DynamicChoice());

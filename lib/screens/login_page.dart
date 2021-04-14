@@ -96,7 +96,7 @@ class _LoginState extends State<Login> {
                 Container(
               padding: EdgeInsets.symmetric(vertical: 20),
               child: ConstrainedBox(
-                constraints: BoxConstraints.tightFor(height: 35, width: 150),
+                constraints: BoxConstraints.tightFor(height: 35, width: 160),
                 child: ElevatedButton(
                   child: Text("continue as guest"),
                   style: ButtonStyle(
@@ -130,7 +130,7 @@ class _LoginState extends State<Login> {
               height: 100,
             ),
 
-            Text("-------------------- Not signed up yet? -------------------- "),
+            Text("------------- Not signed up yet? ------------- "),
             SizedBox(
               height: 10
             ),

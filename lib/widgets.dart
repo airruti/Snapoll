@@ -149,8 +149,8 @@ IconData categoryIcon(String category)
   IconData theIcon;
   switch(category)
   {
-    case 'Pets':
-      theIcon = Icons.pets_rounded;
+    case 'Tech':
+      theIcon = Icons.computer;
       break;
     case 'Movies':
       theIcon = Icons.local_movies_rounded;
